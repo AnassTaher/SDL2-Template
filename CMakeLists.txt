@@ -1,10 +1,12 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.0...3.17)
 project(SDL2_Template)
-
-
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
-set(SDL2_PATH ${CMAKE_SOURCE_DIR}/SDL2)
+
+
+if (WIN32)
+    set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
+    set(SDL2_PATH ${CMAKE_SOURCE_DIR}/SDL2)
+endif ()
 
 
 # Find SDL2
@@ -21,17 +23,18 @@ include_directories(
 )
 
 # Include all files in the src and include directories for running the project
-file(GLOB all_SRCS
+file(GLOB sources
         "${PROJECT_SOURCE_DIR}/include/*.h"
         "${PROJECT_SOURCE_DIR}/src/*.cpp"
-        "${PROJECT_SOURCE_DIR}/*.cpp" # Remove this line if you don't have any .cpp files in the root dir
 )
 
 # Copy over the SDL2.dll to the build directory
-file(GLOB DLL_FILES "${CMAKE_SOURCE_DIR}/SDL2/bin/*.dll")
-file(COPY ${DLL_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+if (WIN32)
+    file(GLOB DLL_FILES "${CMAKE_SOURCE_DIR}/SDL2/bin/*.dll")
+    file(COPY ${DLL_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+endif ()
 
-add_executable(${CMAKE_PROJECT_NAME} ${all_SRCS})
+add_executable(${CMAKE_PROJECT_NAME} ${sources})
 
 
 target_link_libraries(${CMAKE_PROJECT_NAME} ${SDL2_LIBRARY})
