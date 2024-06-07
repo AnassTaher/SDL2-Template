@@ -17,6 +17,7 @@ int main(int argc, char* argv[]){
 
    SDL_RenderPresent(renderer);
 
+
    SDL_Delay(500);
 
    SDL_DestroyWindow(window);
